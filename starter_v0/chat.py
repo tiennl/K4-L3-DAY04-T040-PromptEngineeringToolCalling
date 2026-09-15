@@ -35,6 +35,16 @@ def json_text(value: Any, *, max_chars: int | None = None) -> str:
     return text
 
 
+def format_tool_event(event: dict[str, Any]) -> str:
+    """Render one tool event so a human can audit the complete tool trace."""
+    tool_name = event.get("tool", "unknown_tool")
+    args = json_text(event.get("args", {}), max_chars=12000)
+    result = event.get("result", {})
+    result_label = "error" if isinstance(result, dict) and result.get("error") else "result"
+    rendered_result = json_text(result, max_chars=12000)
+    return f"[tool] {tool_name}\n  input: {args}\n  {result_label}: {rendered_result}"
+
+
 def trim_history(history: list[dict[str, str]], window: int) -> list[dict[str, str]]:
     if window <= 0:
         return []
@@ -112,8 +122,8 @@ def run_model_tool_loop(
         non_clarification_events: list[dict[str, Any]] = []
 
         for call in calls:
-            print(f"[tool] {call.name}({json.dumps(call.args, ensure_ascii=True, sort_keys=True)})")
             event = execute_tool_call(call)
+            print(format_tool_event(event))
             round_record["tool_results"].append(event)
             all_tool_events.append(event)
 
