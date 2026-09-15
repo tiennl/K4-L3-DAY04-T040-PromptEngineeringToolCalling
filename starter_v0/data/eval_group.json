@@ -3,5 +3,251 @@
   "dataset_role": "group",
   "description": "Template intentionally left empty. The team must write exactly 10 original IT helpdesk cases: 5 single-turn query cases and 5 multi-turn turns cases.",
   "allowed_failure_types": ["wrong_tool", "wrong_arg_value", "wrong_boundary", "unnecessary_tool", "out_of_scope", "missing_info"],
-  "cases": []
+  "cases": [
+    {
+      "id": "G01_missing_asset_id",
+      "phase": "B",
+      "suite": "group",
+      "query": "Kiểm tra Wi-Fi trên laptop của tôi giúp nhé.",
+      "failure_type": "missing_info",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "clarify",
+            "args": {
+              "response_type": "text"
+            }
+          }
+        ]
+      },
+      "metadata": {
+        "what_it_tests": "Không được tự đoán asset ID từ mô tả chung; phải hỏi asset ID."
+      }
+    },
+    {
+      "id": "G02_missing_employee_id",
+      "phase": "B",
+      "suite": "group",
+      "query": "Kiểm tra trạng thái tài khoản của nhân viên bên Finance giúp mình.",
+      "failure_type": "missing_info",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "clarify",
+            "args": {
+              "response_type": "text"
+            }
+          }
+        ]
+      },
+      "metadata": {
+        "what_it_tests": "Không được dùng phòng ban thay cho employee ID."
+      }
+    },
+    {
+      "id": "G03_ambiguous_environment",
+      "phase": "B",
+      "suite": "group",
+      "query": "Kiểm tra email ở môi trường test của nhóm mình.",
+      "failure_type": "missing_info",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "clarify",
+            "args": {
+              "response_type": "choice",
+              "options": [
+                "production",
+                "staging"
+              ]
+            }
+          }
+        ]
+      },
+      "metadata": {
+        "what_it_tests": "Không được tự chọn production hoặc staging khi môi trường chưa rõ."
+      }
+    },
+    {
+      "id": "G04_specific_vpn_check",
+      "phase": "B",
+      "suite": "group",
+      "query": "Kiểm tra riêng VPN trên máy LT-240.",
+      "failure_type": "wrong_arg_value",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "inspect_device",
+            "args": {
+              "asset_id": "LT-240",
+              "check": "vpn"
+            }
+          }
+        ]
+      },
+      "metadata": {
+        "what_it_tests": "Dùng phạm vi kiểm tra vpn được yêu cầu thay vì mặc định all."
+      }
+    },
+    {
+      "id": "G05_ticket_needs_confirmation",
+      "phase": "B",
+      "suite": "group",
+      "query": "Tạo ticket mức medium cho lỗi Wi-Fi trên LT-240.",
+      "failure_type": "wrong_boundary",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "clarify",
+            "args": {
+              "response_type": "yes_no"
+            }
+          }
+        ]
+      },
+      "metadata": {
+        "what_it_tests": "Phải hỏi xác nhận hiện tại trước khi gọi create_ticket."
+      }
+    },
+    {
+      "id": "G06_clarify_then_inspect",
+      "phase": "B",
+      "suite": "group",
+      "turns": [
+        {
+          "role": "user",
+          "content": "Kiểm tra tình trạng mạng trên máy của tôi."
+        },
+        {
+          "role": "user",
+          "content": "Asset ID là DT-031."
+        }
+      ],
+      "failure_type": "missing_info",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "inspect_device",
+            "args": {
+              "asset_id": "DT-031",
+              "check": "network"
+            }
+          }
+        ]
+      },
+      "metadata": {
+        "what_it_tests": "Giữ ngữ cảnh qua lượt và chỉ inspect sau khi nhận asset ID hợp lệ."
+      }
+    },
+    {
+      "id": "G07_corrected_employee_id",
+      "phase": "B",
+      "suite": "group",
+      "turns": [
+        {
+          "role": "user",
+          "content": "Tra cứu tài khoản nhân viên EMP-1001."
+        },
+        {
+          "role": "user",
+          "content": "Xin lỗi, ID đúng là EMP-1005. Hãy dùng ID mới."
+        }
+      ],
+      "failure_type": "wrong_arg_value",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "lookup_user",
+            "args": {
+              "employee_id": "EMP-1005"
+            }
+          }
+        ]
+      },
+      "metadata": {
+        "what_it_tests": "Ưu tiên giá trị được sửa ở lượt mới và không tiếp tục dùng employee ID cũ."
+      }
+    },
+    {
+      "id": "G08_cancelled_diagnostic",
+      "phase": "B",
+      "suite": "group",
+      "turns": [
+        {
+          "role": "user",
+          "content": "Kiểm tra trạng thái VPN production nhé."
+        },
+        {
+          "role": "user",
+          "content": "Thôi, không cần kiểm tra nữa. Hủy yêu cầu này."
+        }
+      ],
+      "failure_type": "unnecessary_tool",
+      "expect": {
+        "no_tool": true
+      },
+      "metadata": {
+        "what_it_tests": "Tôn trọng lệnh hủy và không thực hiện yêu cầu đã bị hủy."
+      }
+    },
+    {
+      "id": "G09_updated_ticket_confirmation",
+      "phase": "B",
+      "suite": "group",
+      "turns": [
+        {
+          "role": "user",
+          "content": "Tôi muốn tạo ticket mức low cho lỗi Outlook trên LT-204."
+        },
+        {
+          "role": "user",
+          "content": "Đổi mức ưu tiên thành high và hãy hỏi lại xác nhận với payload mới."
+        }
+      ],
+      "failure_type": "wrong_boundary",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "clarify",
+            "args": {
+              "response_type": "yes_no"
+            }
+          }
+        ]
+      },
+      "metadata": {
+        "what_it_tests": "Payload thay đổi phải làm mất hiệu lực xác nhận cũ và cần xác nhận lại."
+      }
+    },
+    {
+      "id": "G10_latest_intent_status_then_device",
+      "phase": "B",
+      "suite": "group",
+      "turns": [
+        {
+          "role": "user",
+          "content": "Kiểm tra Wi-Fi production trước."
+        },
+        {
+          "role": "user",
+          "content": "Ý mình là kiểm tra riêng network trên asset LT-318, không cần status dịch vụ."
+        }
+      ],
+      "failure_type": "wrong_tool",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "inspect_device",
+            "args": {
+              "asset_id": "LT-318",
+              "check": "network"
+            }
+          }
+        ]
+      },
+      "metadata": {
+        "what_it_tests": "Lệnh mới nhất thay thế yêu cầu status trước đó."
+      }
+    }
+  ]
 }

@@ -1,0 +1,680 @@
+{
+  "run_id": "v1_B_group_openai_20260915T202413154080",
+  "version": "v1",
+  "artifact_version": "v1+p3950ecb355ad+td4848549884e",
+  "prompt_hash": "3950ecb355adf3db128d6f22b0e029df86734901301f9c9799304bb33936bcf8",
+  "tools_hash": "d4848549884eb9613313a2a8dec5faca4e8299842790ac2d42a04195b4da3198",
+  "phase": "B",
+  "suite": "group",
+  "provider": "openai",
+  "model": "gpt-4o-mini",
+  "system_prompt": "D:\\IT\\AI20K\\K4-L3-DAY04-T040-PromptEngineeringToolCalling\\starter_v0\\artifacts\\system_prompt.md",
+  "tools": "D:\\IT\\AI20K\\K4-L3-DAY04-T040-PromptEngineeringToolCalling\\starter_v0\\artifacts\\tools.yaml",
+  "eval_cases": "data\\eval_group.json",
+  "dataset_id": "day04_v3_helpdesk_group",
+  "dataset_role": "group",
+  "description": "Template intentionally left empty. The team must write exactly 10 original IT helpdesk cases: 5 single-turn query cases and 5 multi-turn turns cases.",
+  "generated_at": "2026-09-15T20:24:13",
+  "summary": {
+    "total_cases": 10,
+    "measured_cases": 10,
+    "provider_error_cases": 0,
+    "passed_cases": 8,
+    "case_accuracy": 0.8,
+    "tool_routing_accuracy": 0.8,
+    "argument_accuracy": 0.8,
+    "multiturn_accuracy": 1.0,
+    "failure_counts": {
+      "missing_info": 1,
+      "wrong_boundary": 1
+    },
+    "observed_mismatch_counts": {
+      "missing_tool_call": 2
+    }
+  },
+  "results": [
+    {
+      "id": "G01_missing_asset_id",
+      "phase": "B",
+      "suite": "group",
+      "case_suite": "group",
+      "is_multiturn": false,
+      "metadata": {
+        "what_it_tests": "Không được tự đoán asset ID từ mô tả chung; phải hỏi asset ID."
+      },
+      "input": "Kiểm tra Wi-Fi trên laptop của tôi giúp nhé.",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "clarify",
+            "args": {
+              "response_type": "text"
+            }
+          }
+        ]
+      },
+      "result": {
+        "passed": true,
+        "routing_correct": true,
+        "args_correct": true,
+        "actual_tool_calls": [
+          {
+            "name": "clarify",
+            "args": {
+              "question": "Bạn có thể cung cấp mã tài sản của laptop không?",
+              "response_type": "text"
+            }
+          }
+        ],
+        "actual_text": null,
+        "case_failure_type": "missing_info",
+        "observed_mismatch": null,
+        "failure_type": null,
+        "failures": []
+      },
+      "tool_results": [
+        {
+          "tool": "clarify",
+          "args": {
+            "question": "Bạn có thể cung cấp mã tài sản của laptop không?",
+            "response_type": "text"
+          },
+          "result": {
+            "tool": "clarify",
+            "question": "Bạn có thể cung cấp mã tài sản của laptop không?",
+            "response_type": "text",
+            "options": [],
+            "awaiting_user": true
+          }
+        }
+      ]
+    },
+    {
+      "id": "G02_missing_employee_id",
+      "phase": "B",
+      "suite": "group",
+      "case_suite": "group",
+      "is_multiturn": false,
+      "metadata": {
+        "what_it_tests": "Không được dùng phòng ban thay cho employee ID."
+      },
+      "input": "Kiểm tra trạng thái tài khoản của nhân viên bên Finance giúp mình.",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "clarify",
+            "args": {
+              "response_type": "text"
+            }
+          }
+        ]
+      },
+      "result": {
+        "passed": true,
+        "routing_correct": true,
+        "args_correct": true,
+        "actual_tool_calls": [
+          {
+            "name": "clarify",
+            "args": {
+              "question": "Bạn có thể cung cấp mã nhân viên của người trong bộ phận Finance mà bạn muốn kiểm tra không?",
+              "response_type": "text"
+            }
+          }
+        ],
+        "actual_text": null,
+        "case_failure_type": "missing_info",
+        "observed_mismatch": null,
+        "failure_type": null,
+        "failures": []
+      },
+      "tool_results": [
+        {
+          "tool": "clarify",
+          "args": {
+            "question": "Bạn có thể cung cấp mã nhân viên của người trong bộ phận Finance mà bạn muốn kiểm tra không?",
+            "response_type": "text"
+          },
+          "result": {
+            "tool": "clarify",
+            "question": "Bạn có thể cung cấp mã nhân viên của người trong bộ phận Finance mà bạn muốn kiểm tra không?",
+            "response_type": "text",
+            "options": [],
+            "awaiting_user": true
+          }
+        }
+      ]
+    },
+    {
+      "id": "G03_ambiguous_environment",
+      "phase": "B",
+      "suite": "group",
+      "case_suite": "group",
+      "is_multiturn": false,
+      "metadata": {
+        "what_it_tests": "Không được tự chọn production hoặc staging khi môi trường chưa rõ."
+      },
+      "input": "Kiểm tra email ở môi trường test của nhóm mình.",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "clarify",
+            "args": {
+              "response_type": "choice",
+              "options": [
+                "production",
+                "staging"
+              ]
+            }
+          }
+        ]
+      },
+      "result": {
+        "passed": false,
+        "routing_correct": false,
+        "args_correct": false,
+        "actual_tool_calls": [
+          {
+            "name": "check_service_status",
+            "args": {
+              "service": "email",
+              "environment": "staging"
+            }
+          }
+        ],
+        "actual_text": null,
+        "case_failure_type": "missing_info",
+        "observed_mismatch": "missing_tool_call",
+        "failure_type": "missing_info",
+        "failures": [
+          "missing tool call clarify",
+          "extra tool call check_service_status"
+        ]
+      },
+      "tool_results": [
+        {
+          "tool": "check_service_status",
+          "args": {
+            "service": "email",
+            "environment": "staging"
+          },
+          "result": {
+            "tool": "check_service_status",
+            "service": "email",
+            "environment": "staging",
+            "status": "maintenance",
+            "incident": "Planned connector upgrade",
+            "incident_id": "CHG-221",
+            "affected_locations": [
+              "All"
+            ],
+            "started_at": "2026-09-14T08:00:00+07:00",
+            "last_updated": "2026-09-14T08:40:00+07:00",
+            "workaround": "Use the production tenant for approved test messages",
+            "checked_at": "2026-09-14T09:00:00+07:00"
+          }
+        }
+      ]
+    },
+    {
+      "id": "G04_specific_vpn_check",
+      "phase": "B",
+      "suite": "group",
+      "case_suite": "group",
+      "is_multiturn": false,
+      "metadata": {
+        "what_it_tests": "Dùng phạm vi kiểm tra vpn được yêu cầu thay vì mặc định all."
+      },
+      "input": "Kiểm tra riêng VPN trên máy LT-240.",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "inspect_device",
+            "args": {
+              "asset_id": "LT-240",
+              "check": "vpn"
+            }
+          }
+        ]
+      },
+      "result": {
+        "passed": true,
+        "routing_correct": true,
+        "args_correct": true,
+        "actual_tool_calls": [
+          {
+            "name": "inspect_device",
+            "args": {
+              "asset_id": "LT-240",
+              "check": "vpn"
+            }
+          }
+        ],
+        "actual_text": null,
+        "case_failure_type": "wrong_arg_value",
+        "observed_mismatch": null,
+        "failure_type": null,
+        "failures": []
+      },
+      "tool_results": [
+        {
+          "tool": "inspect_device",
+          "args": {
+            "asset_id": "LT-240",
+            "check": "vpn"
+          },
+          "result": {
+            "tool": "inspect_device",
+            "asset_id": "LT-240",
+            "check": "vpn",
+            "device": {
+              "asset_id": "LT-240",
+              "manufacturer": "Dell",
+              "type": "laptop",
+              "model": "Dell Latitude 7440",
+              "os": "Windows 11 23H2",
+              "assigned_to": "EMP-1002",
+              "location": "Bangkok floor 4",
+              "purchase_date": "2024-05-08",
+              "warranty_until": "2027-05-07"
+            },
+            "diagnostics": {
+              "vpn": "client 5.2.1; no recent attempt"
+            },
+            "snapshot_at": "2026-09-14T09:00:00+07:00"
+          }
+        }
+      ]
+    },
+    {
+      "id": "G05_ticket_needs_confirmation",
+      "phase": "B",
+      "suite": "group",
+      "case_suite": "group",
+      "is_multiturn": false,
+      "metadata": {
+        "what_it_tests": "Phải hỏi xác nhận hiện tại trước khi gọi create_ticket."
+      },
+      "input": "Tạo ticket mức medium cho lỗi Wi-Fi trên LT-240.",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "clarify",
+            "args": {
+              "response_type": "yes_no"
+            }
+          }
+        ]
+      },
+      "result": {
+        "passed": false,
+        "routing_correct": false,
+        "args_correct": false,
+        "actual_tool_calls": [
+          {
+            "name": "create_ticket",
+            "args": {
+              "summary": "Lỗi Wi-Fi trên LT-240",
+              "priority": "medium",
+              "asset_id": "LT-240",
+              "confirmed": false
+            }
+          }
+        ],
+        "actual_text": null,
+        "case_failure_type": "wrong_boundary",
+        "observed_mismatch": "missing_tool_call",
+        "failure_type": "wrong_boundary",
+        "failures": [
+          "missing tool call clarify",
+          "extra tool call create_ticket"
+        ]
+      },
+      "tool_results": [
+        {
+          "tool": "create_ticket",
+          "args": {
+            "summary": "Lỗi Wi-Fi trên LT-240",
+            "priority": "medium",
+            "asset_id": "LT-240",
+            "confirmed": false
+          },
+          "result": {
+            "tool": "create_ticket",
+            "status": "needs_confirmation",
+            "message": "Create the ticket only after explicit user confirmation."
+          }
+        }
+      ]
+    },
+    {
+      "id": "G06_clarify_then_inspect",
+      "phase": "B",
+      "suite": "group",
+      "case_suite": "group",
+      "is_multiturn": true,
+      "metadata": {
+        "what_it_tests": "Giữ ngữ cảnh qua lượt và chỉ inspect sau khi nhận asset ID hợp lệ."
+      },
+      "input": [
+        {
+          "role": "user",
+          "content": "Kiểm tra tình trạng mạng trên máy của tôi."
+        },
+        {
+          "role": "user",
+          "content": "Asset ID là DT-031."
+        }
+      ],
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "inspect_device",
+            "args": {
+              "asset_id": "DT-031",
+              "check": "network"
+            }
+          }
+        ]
+      },
+      "result": {
+        "passed": true,
+        "routing_correct": true,
+        "args_correct": true,
+        "actual_tool_calls": [
+          {
+            "name": "inspect_device",
+            "args": {
+              "asset_id": "DT-031",
+              "check": "network"
+            }
+          }
+        ],
+        "actual_text": null,
+        "case_failure_type": "missing_info",
+        "observed_mismatch": null,
+        "failure_type": null,
+        "failures": []
+      },
+      "tool_results": [
+        {
+          "tool": "inspect_device",
+          "args": {
+            "asset_id": "DT-031",
+            "check": "network"
+          },
+          "result": {
+            "tool": "inspect_device",
+            "asset_id": "DT-031",
+            "check": "network",
+            "device": {
+              "asset_id": "DT-031",
+              "manufacturer": "HP",
+              "type": "desktop",
+              "model": "HP EliteDesk 800 G9",
+              "os": "Windows 11 23H2",
+              "assigned_to": "EMP-1003",
+              "location": "Bangkok floor 2",
+              "purchase_date": "2023-11-20",
+              "warranty_until": "2026-11-19"
+            },
+            "diagnostics": {
+              "network": "online; latency 3 ms; DNS healthy"
+            },
+            "snapshot_at": "2026-09-14T09:00:00+07:00"
+          }
+        }
+      ]
+    },
+    {
+      "id": "G07_corrected_employee_id",
+      "phase": "B",
+      "suite": "group",
+      "case_suite": "group",
+      "is_multiturn": true,
+      "metadata": {
+        "what_it_tests": "Ưu tiên giá trị được sửa ở lượt mới và không tiếp tục dùng employee ID cũ."
+      },
+      "input": [
+        {
+          "role": "user",
+          "content": "Tra cứu tài khoản nhân viên EMP-1001."
+        },
+        {
+          "role": "user",
+          "content": "Xin lỗi, ID đúng là EMP-1005. Hãy dùng ID mới."
+        }
+      ],
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "lookup_user",
+            "args": {
+              "employee_id": "EMP-1005"
+            }
+          }
+        ]
+      },
+      "result": {
+        "passed": true,
+        "routing_correct": true,
+        "args_correct": true,
+        "actual_tool_calls": [
+          {
+            "name": "lookup_user",
+            "args": {
+              "employee_id": "EMP-1005"
+            }
+          }
+        ],
+        "actual_text": null,
+        "case_failure_type": "wrong_arg_value",
+        "observed_mismatch": null,
+        "failure_type": null,
+        "failures": []
+      },
+      "tool_results": [
+        {
+          "tool": "lookup_user",
+          "args": {
+            "employee_id": "EMP-1005"
+          },
+          "result": {
+            "tool": "lookup_user",
+            "employee": {
+              "employee_id": "EMP-1005",
+              "display_name": "Eva Lim",
+              "department": "Legal",
+              "office": "Singapore",
+              "account_status": "active",
+              "mfa_status": "enrolled",
+              "assigned_assets": [
+                "LT-318"
+              ]
+            },
+            "snapshot_at": "2026-09-14T09:00:00+07:00"
+          }
+        }
+      ]
+    },
+    {
+      "id": "G08_cancelled_diagnostic",
+      "phase": "B",
+      "suite": "group",
+      "case_suite": "group",
+      "is_multiturn": true,
+      "metadata": {
+        "what_it_tests": "Tôn trọng lệnh hủy và không thực hiện yêu cầu đã bị hủy."
+      },
+      "input": [
+        {
+          "role": "user",
+          "content": "Kiểm tra trạng thái VPN production nhé."
+        },
+        {
+          "role": "user",
+          "content": "Thôi, không cần kiểm tra nữa. Hủy yêu cầu này."
+        }
+      ],
+      "expect": {
+        "no_tool": true
+      },
+      "result": {
+        "passed": true,
+        "routing_correct": true,
+        "args_correct": true,
+        "actual_tool_calls": [],
+        "actual_text": "{\n  \"intent\": \"cancel_request\",\n  \"action\": \"no_action\",\n  \"reply\": \"Yêu cầu kiểm tra trạng thái VPN đã được hủy.\",\n  \"evidence_ids\": []\n}",
+        "case_failure_type": "unnecessary_tool",
+        "observed_mismatch": null,
+        "failure_type": null,
+        "failures": []
+      },
+      "tool_results": []
+    },
+    {
+      "id": "G09_updated_ticket_confirmation",
+      "phase": "B",
+      "suite": "group",
+      "case_suite": "group",
+      "is_multiturn": true,
+      "metadata": {
+        "what_it_tests": "Payload thay đổi phải làm mất hiệu lực xác nhận cũ và cần xác nhận lại."
+      },
+      "input": [
+        {
+          "role": "user",
+          "content": "Tôi muốn tạo ticket mức low cho lỗi Outlook trên LT-204."
+        },
+        {
+          "role": "user",
+          "content": "Đổi mức ưu tiên thành high và hãy hỏi lại xác nhận với payload mới."
+        }
+      ],
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "clarify",
+            "args": {
+              "response_type": "yes_no"
+            }
+          }
+        ]
+      },
+      "result": {
+        "passed": true,
+        "routing_correct": true,
+        "args_correct": true,
+        "actual_tool_calls": [
+          {
+            "name": "clarify",
+            "args": {
+              "question": "Bạn có muốn tạo ticket với mức ưu tiên cao cho lỗi Outlook trên LT-204 không?",
+              "response_type": "yes_no"
+            }
+          }
+        ],
+        "actual_text": null,
+        "case_failure_type": "wrong_boundary",
+        "observed_mismatch": null,
+        "failure_type": null,
+        "failures": []
+      },
+      "tool_results": [
+        {
+          "tool": "clarify",
+          "args": {
+            "question": "Bạn có muốn tạo ticket với mức ưu tiên cao cho lỗi Outlook trên LT-204 không?",
+            "response_type": "yes_no"
+          },
+          "result": {
+            "tool": "clarify",
+            "question": "Bạn có muốn tạo ticket với mức ưu tiên cao cho lỗi Outlook trên LT-204 không?",
+            "response_type": "yes_no",
+            "options": [],
+            "awaiting_user": true
+          }
+        }
+      ]
+    },
+    {
+      "id": "G10_latest_intent_status_then_device",
+      "phase": "B",
+      "suite": "group",
+      "case_suite": "group",
+      "is_multiturn": true,
+      "metadata": {
+        "what_it_tests": "Lệnh mới nhất thay thế yêu cầu status trước đó."
+      },
+      "input": [
+        {
+          "role": "user",
+          "content": "Kiểm tra Wi-Fi production trước."
+        },
+        {
+          "role": "user",
+          "content": "Ý mình là kiểm tra riêng network trên asset LT-318, không cần status dịch vụ."
+        }
+      ],
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "inspect_device",
+            "args": {
+              "asset_id": "LT-318",
+              "check": "network"
+            }
+          }
+        ]
+      },
+      "result": {
+        "passed": true,
+        "routing_correct": true,
+        "args_correct": true,
+        "actual_tool_calls": [
+          {
+            "name": "inspect_device",
+            "args": {
+              "asset_id": "LT-318",
+              "check": "network"
+            }
+          }
+        ],
+        "actual_text": null,
+        "case_failure_type": "wrong_tool",
+        "observed_mismatch": null,
+        "failure_type": null,
+        "failures": []
+      },
+      "tool_results": [
+        {
+          "tool": "inspect_device",
+          "args": {
+            "asset_id": "LT-318",
+            "check": "network"
+          },
+          "result": {
+            "tool": "inspect_device",
+            "asset_id": "LT-318",
+            "check": "network",
+            "device": {
+              "asset_id": "LT-318",
+              "manufacturer": "Apple",
+              "type": "laptop",
+              "model": "MacBook Pro 14-inch M3",
+              "os": "macOS 15.0",
+              "assigned_to": "EMP-1005",
+              "location": "Singapore floor 6",
+              "purchase_date": "2024-01-18",
+              "warranty_until": "2027-01-17"
+            },
+            "diagnostics": {
+              "network": "online; latency 38 ms; DNS healthy"
+            },
+            "snapshot_at": "2026-09-14T09:00:00+07:00"
+          }
+        }
+      ]
+    }
+  ]
+}
