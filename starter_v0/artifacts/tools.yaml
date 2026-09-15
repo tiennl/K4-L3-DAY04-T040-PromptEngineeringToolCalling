@@ -1,67 +1,61 @@
-# starter_v0 — intentionally incomplete first-draft declarations.
-# Students improve routing guidance, argument conventions, missing-information
-# handling, and confirmation boundaries through v1/v2/v3.
-#
+# Prompt/Tool Engineering declarations for the IT Helpdesk Agent.
 # Keep built-in names and supplied evaluation cases unchanged.
-# Improve descriptions and compatible schemas. Declare team-built bonus tools
-# here and in tools/__init__.py, then test them with team-authored cases.
 tools:
-  # ---------------- Core tools ----------------
   - name: clarify
-    description: "Gửi một câu hỏi cho người dùng."
+    description: "Ask the user for information that is required before another action can be chosen safely. Use text for a missing free-form identifier such as asset/employee ID; yes_no for explicit confirmation; choice when the answer must be selected from declared options. Do not guess missing values."
     parameters:
       type: object
       properties:
-        question: {type: string, default: "", description: "Câu hỏi"}
-        response_type: {type: string, enum: [text, yes_no, choice], default: "text", description: "Kiểu trả lời"}
-        options: {type: array, default: [], items: {type: string}, description: "Các lựa chọn"}
+        question: {type: string, default: "", description: "Short question asking only for the missing/confirmation information."}
+        response_type: {type: string, enum: [text, yes_no, choice], default: "text", description: "text=missing identifier/free text; yes_no=confirmation; choice=one of explicit options."}
+        options: {type: array, default: [], items: {type: string}, description: "Allowed choices when response_type=choice; otherwise leave empty."}
       required: [question]
 
   - name: search_kb
-    description: "Tìm hướng dẫn hỗ trợ kỹ thuật."
+    description: "Search Northstar Labs IT troubleshooting/how-to knowledge. Use for guidance or remediation instructions, not for live service health or a specific device diagnostic. If the user asks only for a category and no useful query text is needed, category is the key routing signal."
     parameters:
       type: object
       properties:
-        query: {type: string, default: "", description: "Nội dung cần tìm"}
-        category: {type: string, enum: [all, vpn, email, wifi, printing, account, security, hardware, software, meeting_room], default: "all", description: "Nhóm hướng dẫn"}
-        top_k: {type: integer, default: 3, description: "Số kết quả"}
+        query: {type: string, default: "", description: "Search terms from the user's current request; do not invent unrelated terms."}
+        category: {type: string, enum: [all, vpn, email, wifi, printing, account, security, hardware, software, meeting_room], default: "all", description: "Knowledge category matching the requested topic."}
+        top_k: {type: integer, default: 3, description: "Number of results."}
       required: [query]
 
   - name: check_service_status
-    description: "Kiểm tra trạng thái một dịch vụ."
+    description: "Check live/shared service health for vpn, email, sso, wifi, or printing. Use for organization-wide/shared service status, not for a specific asset. Preserve an explicitly stated production/staging environment. If the environment is ambiguous or unsupported, clarify instead of guessing."
     parameters:
       type: object
       properties:
-        service: {type: string, enum: [vpn, email, sso, wifi, printing], description: "Tên dịch vụ"}
-        environment: {type: string, enum: [production, staging], default: "production", description: "Môi trường"}
+        service: {type: string, enum: [vpn, email, sso, wifi, printing], description: "Shared service to check."}
+        environment: {type: string, enum: [production, staging], default: "production", description: "Use the environment explicitly requested or carried from valid current conversation context."}
       required: [service]
 
   - name: inspect_device
-    description: "Kiểm tra thông tin và chẩn đoán thiết bị."
+    description: "Inspect/diagnose one specific internal asset. Requires exactly one asset_id per call. For multiple assets, issue one call per asset. Map the requested diagnostic domain to check; never invent or merge asset IDs."
     parameters:
       type: object
       properties:
-        asset_id: {type: string, description: "Mã tài sản"}
-        check: {type: string, enum: [all, network, vpn, security, hardware, software], default: "all", description: "Nhóm kiểm tra"}
+        asset_id: {type: string, description: "Exact asset ID supplied in the request/current conversation."}
+        check: {type: string, enum: [all, network, vpn, security, hardware, software], default: "all", description: "Requested diagnostic scope."}
       required: [asset_id]
 
   - name: lookup_user
-    description: "Tra cứu người dùng trong danh bạ hỗ trợ."
+    description: "Look up an internal employee/account and assigned assets. Requires the exact employee_id from the user's request/current conversation. If missing or ambiguous, clarify instead of guessing."
     parameters:
       type: object
       properties:
-        employee_id: {type: string, description: "Mã nhân viên"}
+        employee_id: {type: string, description: "Exact employee ID, e.g. EMP-1003."}
       required: [employee_id]
 
   - name: format_incident_report
-    description: "Trình bày các kết quả đã có thành báo cáo."
+    description: "Format findings already provided/collected into a report. When the user says findings already exist or asks only to format/present them, call this tool without re-running diagnostic/status/lookup tools."
     parameters:
       type: object
       properties:
         findings:
           type: array
           default: []
-          description: "Các kết quả đã thu thập"
+          description: "Findings already present in the request/context; do not fabricate findings."
           items:
             type: object
             properties:
@@ -69,39 +63,38 @@ tools:
               detail: {type: string}
               source: {type: string}
               status: {type: string}
-        template: {type: string, enum: [brief, technical, handoff], default: "brief", description: "Mẫu báo cáo"}
-        incident_title: {type: string, default: "IT incident", description: "Tiêu đề"}
+        template: {type: string, enum: [brief, technical, handoff], default: "brief", description: "Report template explicitly requested or implied by the current request."}
+        incident_title: {type: string, default: "IT incident", description: "Requested report title."}
       required: [findings, template]
 
-  # ---------------- Optional/advanced tools ----------------
   - name: search_device_info
-    description: "Tìm thông tin công khai về một model thiết bị trên web. Chỉ truyền hãng, model và loại thông tin; không truyền asset ID, employee ID hoặc dữ liệu nội bộ."
+    description: "Search public information for a manufacturer/model. Never send internal asset IDs, employee IDs, credentials, tokens, or other Northstar Labs data to this external search tool."
     parameters:
       type: object
       properties:
-        manufacturer: {type: string, description: "Hãng sản xuất công khai, ví dụ Lenovo"}
-        model: {type: string, description: "Tên model công khai, ví dụ ThinkPad T14 Gen 4"}
-        query_type: {type: string, enum: [specs, drivers, support, compatibility], default: "support", description: "Loại thông tin cần tìm"}
-        max_results: {type: integer, default: 3, description: "Số kết quả, tối đa 5"}
+        manufacturer: {type: string, description: "Public manufacturer name."}
+        model: {type: string, description: "Public model name."}
+        query_type: {type: string, enum: [specs, drivers, support, compatibility], default: "support", description: "Requested public information type."}
+        max_results: {type: integer, default: 3, description: "Number of results, maximum 5."}
       required: [manufacturer, model, query_type]
 
   - name: policy
-    description: "Tìm trong chính sách IT nội bộ."
+    description: "Search internal IT policy/rules/processes. Use for policy questions rather than device diagnostics or shared-service health."
     parameters:
       type: object
       properties:
-        query: {type: string, default: "", description: "Nội dung cần tìm"}
-        policy_area: {type: string, enum: [all, access_control, data_privacy, external_tools, incident_response, service_operations, ticketing], default: "all", description: "Nhóm chính sách"}
-        top_k: {type: integer, default: 3, description: "Số mục"}
+        query: {type: string, default: "", description: "Policy question/search text."}
+        policy_area: {type: string, enum: [all, access_control, data_privacy, external_tools, incident_response, service_operations, ticketing], default: "all", description: "Policy area matching the question."}
+        top_k: {type: integer, default: 3, description: "Number of policy results."}
       required: [query]
 
   - name: create_ticket
-    description: "Tạo một ticket hỗ trợ."
+    description: "Create a support ticket and write local state. This is side-effecting and requires explicit confirmation of the CURRENT payload. Never use on the initial creation request before confirmation. If summary/priority/asset changes after confirmation, confirmation becomes invalid and must be obtained again. Never place credentials/tokens/MFA/recovery secrets in the ticket."
     parameters:
       type: object
       properties:
-        summary: {type: string, default: "", description: "Tóm tắt sự cố"}
-        priority: {type: string, enum: [low, medium, high, critical], default: "medium", description: "Mức ưu tiên"}
-        asset_id: {type: string, default: "", description: "Mã tài sản nếu có"}
-        confirmed: {type: boolean, default: false, description: "Đã được người dùng xác nhận"}
+        summary: {type: string, default: "", description: "Current confirmed incident summary, excluding secrets."}
+        priority: {type: string, enum: [low, medium, high, critical], default: "medium", description: "Current confirmed priority."}
+        asset_id: {type: string, default: "", description: "Exact asset ID if applicable."}
+        confirmed: {type: boolean, default: false, description: "True only after the user explicitly confirms the unchanged current payload."}
       required: [summary]
