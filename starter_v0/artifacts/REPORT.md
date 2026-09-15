@@ -50,7 +50,7 @@ total_cases`, và tool result error đã được review thủ công.
 
 | Version | Prompt/tool change | Hypothesis | Metric | Before | After | Run file |
 |---|---|---|---|---:|---:|---|
-| v0 | baseline |  |  |  |  |  |
+| v0 | baseline (chưa sửa `system_prompt.md`/`tools.yaml`) | n/a — baseline dùng làm mốc so sánh | case_accuracy | — | 0.70 (21/30) | `runs/v0_B_base_openrouter_20260915T185837400932.json` |
 | v1 |  |  |  |  |  |  |
 | v2 |  |  |  |  |  |  |
 | v3 |  |  |  |  |  |  |
