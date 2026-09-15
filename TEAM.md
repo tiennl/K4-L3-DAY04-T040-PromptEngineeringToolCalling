@@ -4,17 +4,20 @@
 
 ## Thông tin bài nộp
 
-- Tên nhóm:
-- Người đại diện / MSSV:
-- Tên repo: `K4-L3-DAY04-HoVaTen-MSSV-PromptEngineeringToolCalling`
-- URL repo, nhánh nộp, commit chốt:
-- Deadline áp dụng và link thông báo đổi hạn nếu có:
+- Tên nhóm: T040
+- Người đại diện / MSSV: Ngô Lê Thủy Tiên / 2A202602614
+- Tên repo: `K4-L3-DAY04-T040-PromptEngineeringToolCalling` _(cần xác nhận lại quy tắc — README/SUBMISSION.md yêu cầu HoVaTen-MSSV, chưa rõ mã nhóm T040 có được chấp nhận thay thế không)_
+- URL repo, nhánh nộp, commit chốt: https://github.com/tiennl/K4-L3-DAY04-T040-PromptEngineeringToolCalling — nhánh: _(chưa chốt, đang phát triển trên `tien`)_ — commit: _(điền commit chốt cuối buổi)_
+- Deadline áp dụng và link thông báo đổi hạn nếu có: 23:59 ngày làm lab, Asia/Ho_Chi_Minh (mặc định theo SUBMISSION.md; cập nhật nếu Keycoach có thông báo khác)
 
 ## Thành viên
 
 | Họ và tên | MSSV | GitHub | Vai trò và công việc | File/commit/PR |
 |---|---|---|---|---|
-| | | | | |
+| Phùng Trọng Chiến | 2A202602430 | Chienne12 | Prompt & Tool Engineering (v0 → v3) | |
+| Nguyễn Hồng Khoa | 2A202602534 | hmster915 | Eval nhóm & An toàn | |
+| Nguyễn Khánh Linh | 2A202602409 | klinhnguyen2012 | UI & Transcript | |
+| Ngô Lê Thủy Tiên | 2A202602614 | tiennl | Report, tổng hợp & Bonus mở rộng | `starter_v0/artifacts/REPORT.md` (Phần A), `TEAM.md` (checklist phân công) |
 
 ## Phân công song song (4 người)
 
@@ -25,7 +28,7 @@
 - [ ] Cả nhóm thống nhất giữ IT Helpdesk hay đổi lĩnh vực; nếu đổi, chốt ngay nhiệm vụ chính/người dùng/tool flow
 - [ ] 1 người chạy **v0 chưa sửa gì** và commit run JSON làm mốc chung cho cả nhóm so sánh sau này
 
-### Người 1 — Prompt & Tool Engineering (v0 → v3)
+### Người 1 — Phùng Trọng Chiến — Prompt & Tool Engineering (v0 → v3)
 
 - [ ] Đọc trace/lỗi từ run v0 baseline, chọn 1 failure rõ (sai tool/sai input/thiếu info/multi-turn/xác nhận-hủy/an toàn dữ liệu)
 - [ ] Đặt giả thuyết → sửa `artifacts/system_prompt.md` và/hoặc `artifacts/tools.yaml` → chạy v1
@@ -33,7 +36,7 @@
 - [ ] Ghi mọi lần chạy vào `artifacts/version_log.csv` (thay đổi, lý do, hash, metric trước/sau, đường dẫn run)
 - Sở hữu file: `artifacts/system_prompt.md`, `artifacts/tools.yaml`, `artifacts/version_log.csv`
 
-### Người 2 — Eval nhóm & An toàn
+### Người 2 — Nguyễn Hồng Khoa — Eval nhóm & An toàn
 
 - [ ] Viết đúng 10 case vào `data/eval_group.json` (5 một lượt + 5 nhiều lượt), có đầu ra kỳ vọng
 - [ ] Chạy case nhóm cùng các version của Người 1 khi có
@@ -41,7 +44,7 @@
 - [ ] Phân tích chi tiết ít nhất 3 case an toàn (hành vi thật: hỏi lại, tôn trọng hủy/sửa, giữ dữ liệu nội bộ)
 - Sở hữu file: `data/eval_group.json`, phần phân tích safety trong report
 
-### Người 3 — UI & Transcript
+### Người 3 — Nguyễn Khánh Linh — UI & Transcript
 
 - [ ] Chạy/chỉnh `chat.py` sao cho UI hiện rõ tool được gọi, input, kết quả/lỗi và version đang chạy
 - [ ] Test UI với cả case thường và case đa lượt (thiếu info, sửa/hủy)
@@ -49,7 +52,7 @@
 - [ ] Nhờ 1 người khác chạy thử UI theo đúng hướng dẫn README để xác nhận người ngoài chạy được
 - Sở hữu file: `chat.py` (phần UI), thư mục transcript
 
-### Người 4 — Report, tổng hợp & Bonus mở rộng
+### Người 4 — Ngô Lê Thủy Tiên — Report, tổng hợp & Bonus mở rộng
 
 - [ ] Theo dõi tiến độ 3 người kia, tổng hợp số liệu trước/sau vào `artifacts/REPORT.md`
 - [ ] Viết phần cách chạy, giới hạn còn lại, liên kết evidence (run file, version log, transcript)

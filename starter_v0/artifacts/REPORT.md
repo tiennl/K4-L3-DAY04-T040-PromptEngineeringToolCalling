@@ -1,39 +1,46 @@
 # Day 04 Lab v3 Report — Trợ lý AI của nhóm
 
-- Lĩnh vực tự chọn:
-- Nhiệm vụ và luồng cơ bản đã chốt trước v0:
-- Đường dẫn bộ 30 câu cơ bản và 12 câu an toàn; commit chốt bộ trước v0:
-- Chức năng mở rộng ngoài luồng cơ bản (nếu có; tối đa 10 trong tổng 100 điểm):
+- Lĩnh vực tự chọn: IT Helpdesk (giữ format mẫu của starter, chưa đổi lĩnh vực)
+- Nhiệm vụ và luồng cơ bản đã chốt trước v0: Trợ lý service desk nội bộ — kiểm tra dịch vụ/thiết bị, tra cứu hướng dẫn/chính sách, tạo ticket sau xác nhận
+- Đường dẫn bộ 30 câu cơ bản và 12 câu an toàn; commit chốt bộ trước v0: `data/eval_base.json`, `data/eval_adversarial.json` (bộ IT có sẵn của starter)
+- Chức năng mở rộng ngoài luồng cơ bản (nếu có; tối đa 10 trong tổng 100 điểm): _(đang thiết kế, chưa chốt)_
 
 ## Team
 
-- Team:
+- Team: T040
 - Thành viên và INDIVIDUAL: [TEAM.md](../../TEAM.md)
-- Members:
-- Provider/model:
+- Members: Ngô Lê Thủy Tiên (2A202602614), Phùng Trọng Chiến (2A202602430), Nguyễn Khánh Linh (2A202602409), Nguyễn Hồng Khoa (2A202602534)
+- Provider/model: OpenRouter — `openai/gpt-4o-mini` (dùng cho run v0 baseline)
 
 # PHẦN A — Giới thiệu agent
 
 ## A1. Agent này làm được gì
 
-> Viết 1–2 câu mô tả capability và giới hạn của agent.
+Trợ lý IT service desk nội bộ cho công ty giả lập Northstar Labs: kiểm tra trạng thái dịch vụ (VPN/email/SSO/wifi/printing), chẩn đoán thiết bị, tra cứu hướng dẫn kỹ thuật và chính sách nội bộ, tra người dùng, và tạo ticket hỗ trợ. Giới hạn ở baseline v0: chưa luôn hỏi xác nhận trước khi tạo ticket và chưa luôn hỏi lại khi thiếu mã tài sản/mã nhân viên (case_accuracy 0.70/30 case) — đang cải thiện qua v1–v3.
 
 **Link dùng thử:**
 
-> URL:
+> URL: _(chờ UI hoàn thiện — xem `chat.py`)_
 
 ## A2. Tool agent có
 
 | Tool | Chức năng | Core / optional / team-built |
 |---|---|---|
 | clarify | Hỏi bổ sung hoặc xác nhận | core |
-|  |  |  |
+| search_kb | Tìm hướng dẫn hỗ trợ kỹ thuật | core |
+| check_service_status | Kiểm tra trạng thái một dịch vụ | core |
+| inspect_device | Kiểm tra thông tin/chẩn đoán thiết bị | core |
+| lookup_user | Tra cứu người dùng trong danh bạ hỗ trợ | core |
+| format_incident_report | Trình bày kết quả thành báo cáo | core |
+| search_device_info | Tìm thông tin công khai về model thiết bị trên web | optional |
+| policy | Tìm trong chính sách IT nội bộ | optional |
+| create_ticket | Tạo ticket hỗ trợ | optional |
 
 ## A3. Câu hỏi mẫu
 
-1.
-2.
-3.
+1. Dịch vụ VPN production hiện có đang gặp sự cố không?
+2. Kiểm tra tổng thể laptop LT-204 giúp mình.
+3. Tìm hướng dẫn cấu hình Outlook profile trên Windows 11.
 
 ## A4. Kịch bản demo đã rehearse
 
@@ -50,7 +57,7 @@ total_cases`, và tool result error đã được review thủ công.
 
 | Version | Prompt/tool change | Hypothesis | Metric | Before | After | Run file |
 |---|---|---|---|---:|---:|---|
-| v0 | baseline |  |  |  |  |  |
+| v0 | baseline (chưa sửa `system_prompt.md`/`tools.yaml`) | n/a — baseline dùng làm mốc so sánh | case_accuracy | — | 0.70 (21/30) | `runs/v0_B_base_openrouter_20260915T185837400932.json` |
 | v1 |  |  |  |  |  |  |
 | v2 |  |  |  |  |  |  |
 | v3 |  |  |  |  |  |  |
