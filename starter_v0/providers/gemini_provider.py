@@ -2,25 +2,9 @@ from __future__ import annotations
 
 import json
 import os
-import re
-import time
 from typing import Any
 
 from providers.base import ModelResponse, ToolCall
-
-_RETRY_DELAY_RE = re.compile(r"retryDelay['\"]?\s*:\s*['\"]?(\d+(?:\.\d+)?)s")
-
-
-def _is_rate_limit_error(exc: Exception) -> bool:
-    message = str(exc)
-    return "RESOURCE_EXHAUSTED" in message or "429" in message
-
-
-def _extract_retry_delay(exc: Exception, default: float) -> float:
-    match = _RETRY_DELAY_RE.search(str(exc))
-    if match:
-        return float(match.group(1)) + 1.0
-    return default
 
 
 def _to_gemini_declarations(tools: list[dict[str, Any]] | None) -> list[dict[str, Any]]:
@@ -90,13 +74,9 @@ class GeminiProvider:
         *,
         api_key_env: str = "GEMINI_API_KEY",
         default_model: str = "gemini-3.5-flash",
-        max_retries: int = 5,
-        default_retry_delay: float = 15.0,
     ) -> None:
         self.api_key_env = api_key_env
         self.default_model = default_model
-        self.max_retries = max_retries
-        self.default_retry_delay = default_retry_delay
 
     def complete(
         self,
@@ -126,21 +106,11 @@ class GeminiProvider:
             config_kwargs["tools"] = [types.Tool(function_declarations=declarations)]
 
         client = genai.Client(api_key=api_key)
-        attempt = 0
-        while True:
-            try:
-                resp = client.models.generate_content(
-                    model=model or self.default_model,
-                    contents=contents,
-                    config=types.GenerateContentConfig(**config_kwargs),
-                )
-                break
-            except Exception as exc:  # noqa: BLE001 - rate limit retry, re-raised otherwise
-                if not _is_rate_limit_error(exc) or attempt >= self.max_retries:
-                    raise
-                delay = _extract_retry_delay(exc, self.default_retry_delay)
-                attempt += 1
-                time.sleep(delay)
+        resp = client.models.generate_content(
+            model=model or self.default_model,
+            contents=contents,
+            config=types.GenerateContentConfig(**config_kwargs),
+        )
 
         text_parts: list[str] = []
         calls: list[ToolCall] = []
