@@ -14,10 +14,10 @@
 
 | Họ và tên | MSSV | GitHub | Vai trò và công việc | File/commit/PR |
 |---|---|---|---|---|
-| Phùng Trọng Chiến | 2A202602430 | Chienne12 | Prompt & Tool Engineering (v0 → v3) | |
-| Nguyễn Hồng Khoa | 2A202602534 | hmster915 | Eval nhóm & An toàn | |
-| Nguyễn Khánh Linh | 2A202602409 | klinhnguyen2012 | UI & Transcript | |
-| Ngô Lê Thủy Tiên | 2A202602614 | tiennl | Report, tổng hợp & Bonus mở rộng | `starter_v0/artifacts/REPORT.md` (Phần A), `TEAM.md` (checklist phân công) |
+| Phùng Trọng Chiến | 2A202602430 | Chienne12 | Prompt & Tool Engineering (v0 → v3) | PR #1 — `artifacts/system_prompt.md`, `artifacts/tools.yaml`, `artifacts/version_log.csv`, `runs/v0-v3_*_openrouter_*.json` |
+| Nguyễn Hồng Khoa | 2A202602534 | hmster915 | Eval nhóm & An toàn | PR #2 — `data/eval_group.json`, `runs/v0-v3_*_group_*.json`, `runs/v0_B_base_openai_*.json` |
+| Nguyễn Khánh Linh | 2A202602409 | klinhnguyen2012 | UI & Transcript | _(chưa có commit)_ |
+| Ngô Lê Thủy Tiên | 2A202602614 | tiennl | Report, tổng hợp & Bonus mở rộng | PR #3 — `starter_v0/artifacts/REPORT.md` (Phần A), `TEAM.md` (thông tin nhóm, checklist phân công) |
 
 ## Phân công song song (4 người)
 
