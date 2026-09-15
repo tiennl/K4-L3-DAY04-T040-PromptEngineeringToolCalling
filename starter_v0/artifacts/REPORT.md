@@ -7,9 +7,9 @@
 
 ## Team
 
-- Team:
+- Team: T040
 - Thành viên và INDIVIDUAL: [TEAM.md](../../TEAM.md)
-- Members:
+- Members: Ngô Lê Thủy Tiên (2A202602614), Phùng Trọng Chiến (2A202602430), Nguyễn Khánh Linh (2A202602409), Nguyễn Hồng Khoa (2A202602534)
 - Provider/model: OpenRouter — `openai/gpt-4o-mini` (dùng cho run v0 baseline)
 
 # PHẦN A — Giới thiệu agent
