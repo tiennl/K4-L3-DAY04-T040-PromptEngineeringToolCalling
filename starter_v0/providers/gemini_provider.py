@@ -5,7 +5,7 @@ import os
 from typing import Any
 
 from providers.base import ModelResponse, ToolCall
-BASE_URL = "http://localhost:20128/v1"
+
 
 def _to_gemini_declarations(tools: list[dict[str, Any]] | None) -> list[dict[str, Any]]:
     declarations: list[dict[str, Any]] = []
@@ -105,13 +105,7 @@ class GeminiProvider:
         if declarations:
             config_kwargs["tools"] = [types.Tool(function_declarations=declarations)]
 
-        client = genai.Client(
-            api_key=api_key,
-            http_options=types.HttpOptions(
-                base_url=BASE_URL
-            ),
-        )
-
+        client = genai.Client(api_key=api_key)
         resp = client.models.generate_content(
             model=model or self.default_model,
             contents=contents,
