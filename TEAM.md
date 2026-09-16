@@ -6,9 +6,9 @@
 
 - Tên nhóm: T040
 - Người đại diện / MSSV: Ngô Lê Thủy Tiên / 2A202602614
-- Tên repo: `K4-L3-DAY04-T040-PromptEngineeringToolCalling` _(cần xác nhận lại quy tắc — README/SUBMISSION.md yêu cầu HoVaTen-MSSV, chưa rõ mã nhóm T040 có được chấp nhận thay thế không)_
-- URL repo, nhánh nộp, commit chốt: https://github.com/tiennl/K4-L3-DAY04-T040-PromptEngineeringToolCalling — nhánh: `main` (PR #1–#4 đã merge từ `chien`/`khoa`/`tien`/`linh-fe` vào `main`; nhánh `tien` hiện trùng `main`) — commit: _(điền commit chốt sau khi merge PR cập nhật REPORT/TEAM này)_
-- Deadline áp dụng và link thông báo đổi hạn nếu có: 23:59 ngày làm lab, Asia/Ho_Chi_Minh (mặc định theo SUBMISSION.md; cập nhật nếu Keycoach có thông báo khác)
+- Tên repo: `K4-L3-DAY04-T040-PromptEngineeringToolCalling`
+- URL repo, nhánh nộp, commit chốt: https://github.com/tiennl/K4-L3-DAY04-T040-PromptEngineeringToolCalling — nhánh: `main` (PR #1–#4 đã merge từ `chien`/`khoa`/`tien`/`linh-fe` vào `main`; nhánh `tien` hiện trùng `main`)
+- Deadline áp dụng và link thông báo đổi hạn nếu có: 12:00 ngày 16/09/2026, Asia/Ho_Chi_Minh
 
 ## Thành viên
 
